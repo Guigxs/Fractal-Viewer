@@ -5,11 +5,15 @@ import threading
 
 import tornado.ioloop
 import tornado.web
+from tornado import gen
 
 WORKER_LIST = []
 
+
+
 class MainHandler(tornado.web.RequestHandler):
-    def test(self, un):
+    @gen.coroutine
+    def testWorker(self):
         print("Starting new thread...")
         a = 0
         while True:
@@ -19,7 +23,29 @@ class MainHandler(tornado.web.RequestHandler):
                 
             if a == 60000000:
                 print("finish")
-                return self.write("finish")
+                return True
+
+    @gen.coroutine
+    def test(self, un):
+        print("Starting new thread...")
+
+        responses = yield self.testWorker()
+        print(responses)
+        self.write("done")
+        # self.render("template.html")
+        # x = threading.Thread(target=self.testWorker, args=(request, response))
+        # x.start()
+        # x.join()
+        # self.write({"success":True})
+
+        # while True:
+        #     a+=1
+        #     if a%6000000==0:
+        #         print(a)
+                
+        #     if a == 60000000:
+        #         print("finish")
+        #         return self.write("finish")
 
     def get(self):
         self.test("un")
@@ -32,6 +58,7 @@ class RegisterHandler(tornado.web.RequestHandler):
         ip, port = json.loads(self.request.body).values()
         WORKER_LIST.append((ip, port))
         self.write("Registered")
+        print("Registered")
 
 def make_app():
     return tornado.web.Application([
@@ -41,22 +68,10 @@ def make_app():
 
 if __name__ == "__main__":
     app = make_app()
-    app.listen(8181)
+    app.listen(8180)
     tornado.ioloop.IOLoop.current().start()
 
 
-
-# def test(request, response):
-#     print("Starting new thread...")
-#     a = 0
-#     while True:
-#         a+=1
-#         if a%6000000==0:
-#             print(a)
-            
-#         if a == 120000000:
-#             # print("finish")
-#             return HTTPResponse(status=200, body={"success":True})
     
 
 # @get('/')
