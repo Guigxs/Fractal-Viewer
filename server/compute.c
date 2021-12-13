@@ -1310,7 +1310,7 @@ static PyObject *__pyx_pf_7compute_compute(CYTHON_UNUSED PyObject *__pyx_self, f
  *     cdef float img = 0
  * 
  *     for i in range(1, iter+1):             # <<<<<<<<<<<<<<
- *         if (complex_r**2 + complex_i**2) > 4:
+ *         if (real**2 + img**2) > 4:
  *             break
  */
   __pyx_t_1 = (__pyx_v_iter + 1);
@@ -1321,16 +1321,16 @@ static PyObject *__pyx_pf_7compute_compute(CYTHON_UNUSED PyObject *__pyx_self, f
     /* "compute.pyx":8
  * 
  *     for i in range(1, iter+1):
- *         if (complex_r**2 + complex_i**2) > 4:             # <<<<<<<<<<<<<<
+ *         if (real**2 + img**2) > 4:             # <<<<<<<<<<<<<<
  *             break
  *         else:
  */
-    __pyx_t_4 = (((powf(__pyx_v_complex_r, 2.0) + powf(__pyx_v_complex_i, 2.0)) > 4.0) != 0);
+    __pyx_t_4 = (((powf(__pyx_v_real, 2.0) + powf(__pyx_v_img, 2.0)) > 4.0) != 0);
     if (__pyx_t_4) {
 
       /* "compute.pyx":9
  *     for i in range(1, iter+1):
- *         if (complex_r**2 + complex_i**2) > 4:
+ *         if (real**2 + img**2) > 4:
  *             break             # <<<<<<<<<<<<<<
  *         else:
  *             real, img = iteration(real, img, complex_r, complex_i)
@@ -1340,7 +1340,7 @@ static PyObject *__pyx_pf_7compute_compute(CYTHON_UNUSED PyObject *__pyx_self, f
       /* "compute.pyx":8
  * 
  *     for i in range(1, iter+1):
- *         if (complex_r**2 + complex_i**2) > 4:             # <<<<<<<<<<<<<<
+ *         if (real**2 + img**2) > 4:             # <<<<<<<<<<<<<<
  *             break
  *         else:
  */
