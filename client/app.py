@@ -46,7 +46,7 @@ class Pixel(Widget):
 class Grid(Widget):
     cols = NumericProperty(800)
     rows = NumericProperty(400)
-    pixel_size = NumericProperty(5)
+    pixel_size = NumericProperty(400)
     zoom = NumericProperty(1)
 
     def __init__(self, **kwargs):
@@ -57,7 +57,7 @@ class Grid(Widget):
 
             for i in range(0, self.cols, self.pixel_size):
                 for j in range(0, self.rows, self.pixel_size):
-                    layout.add_widget(Pixel((((i/self.cols)*4)-2, ((j/self.rows)*2)-1), (i, j), self.pixel_size))
+                    layout.add_widget(Pixel((((i/self.cols)*4)-3, ((j/self.rows)*2)-1), (i, j), self.pixel_size))
  
 
 class MandelbrotView(Widget):
@@ -65,11 +65,24 @@ class MandelbrotView(Widget):
         pass
 
 class MandelbrotApp(App):
+    zoom = 1
+
+    def add(self, val):
+        self.zoom += 1
+
+    def sub(self, val):
+        self.zoom -= 1
+
     def build(self):
         parent = Widget()
-
+        print(parent.pos)
         parent.add_widget(Grid())
+        parent.add_widget(Button(text="+", pos=(0, 400), on_press=self.add))
+        parent.add_widget(Label(text=f"Zoom :{self.zoom}", pos= (100, 400),))
+        parent.add_widget(Button(text="-", pos= (200, 400), on_press=self.sub))
+
         return parent
+
 
 
 if __name__ == '__main__':
