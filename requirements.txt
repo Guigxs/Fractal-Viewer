@@ -1,4 +1,0 @@
-bottle
-Cython
-requests
-tornado

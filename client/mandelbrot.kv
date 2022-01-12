@@ -1,5 +1,24 @@
 #:kivy 1.0.9
 
 <Grid>:
-    size: (500, 500)
-    parent:
+    pixel_size: 80
+
+<Pixel>:
+    max_iter: 20
+
+<PopupBox>:
+    pop_up_text: _pop_up_text
+    loading_value: _loading_value
+    size_hint: .5, .3
+    auto_dismiss: False
+    title: 'Rebuilding'   
+
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            id: _pop_up_text
+            text: ''
+            font_size: 20
+        ProgressBar:
+            id: _loading_value
+            max: 100
