@@ -19,7 +19,8 @@ import time, threading
 
 Window.size = (900, 900)
 
-API_ENDPOINT = "127.0.0.1:8180"
+# API_ENDPOINT = "127.0.0.1:8180"
+API_ENDPOINT = "mood.guigxs.com"
 
 def inter_1d(pos, min, max):
     return min + pos * (max - min)
@@ -74,10 +75,8 @@ class Grid(Widget):
                     graph_values = (i, j)
 
                     layout.add_widget(Pixel(real_values, graph_values, self.pixel_size))
-                
                 if (monitor):
                     App.get_running_app().pop_up.update_value(i/(self.cols))
-
         print(f"Widget ({self.width}, {self.height}) built in x : [{self.start_x}...{self.end_x}] y : [{self.start_y}...{self.end_y}] with pixel size = {self.pixel_size} in {round(time.time() - start, 2)}s")
 
     def refresh(self):
@@ -124,6 +123,15 @@ class MandelbrotApp(App):
         mythread = threading.Thread(target=self.grid.refresh)
         mythread.start()
 
+    def set_size(self, val):
+        self.show_popup()
+
+        self.grid.pixel_size = int(self.size_input.text)
+        self.pixel_size.text = f"Pixel size: {self.grid.pixel_size}"
+
+        mythread = threading.Thread(target=self.grid.refresh)
+        mythread.start()
+
     def change_coord(self, val):
         self.show_popup()
 
@@ -135,28 +143,40 @@ class MandelbrotApp(App):
         mythread = threading.Thread(target=self.grid.refresh)
         mythread.start()
 
+    def fill_boxes(self):
+        self.x0_input.text = str(self.grid.start_x)
+        self.x1_input.text = str(self.grid.end_x)
+        self.y0_input.text = str(self.grid.start_y)
+        self.y1_input.text = str(self.grid.end_y)
+
     def build(self):
         parent = Widget()
 
         self.grid = Grid()
         self.pixel_size = Label(text=f"Pixel size: {self.grid.pixel_size}", pos= (100, 800),)
         self.label = Label(text=f"To:", pos= (800, 500), font_size=40)
+        self.size_input = TextInput(hint_text='New size', multiline=False, pos=(600, 800), halign="center")
         self.x0_input = TextInput(hint_text='x0', multiline=False, pos=(800, 400), font_size=40, halign="center")
         self.x1_input = TextInput(hint_text='x1', multiline=False, pos=(800, 300), font_size=40, halign="center")
         self.y0_input = TextInput(hint_text='y0', multiline=False, pos=(800, 200), font_size=40, halign="center")
         self.y1_input = TextInput(hint_text='y1', multiline=False, pos=(800, 100), font_size=40, halign="center", line_height=10)
         self.button_go = Button(text='GO', pos=(800, 0), on_press=self.change_coord, font_size=40)
         
+
         parent.add_widget(self.grid)
-        parent.add_widget(Button(text="+", pos=(0, 800), on_press=self.add, font_size=50))
+        parent.add_widget(Button(text="-", pos= (0, 800), on_press=self.sub, font_size=50))
         parent.add_widget(self.pixel_size)
-        parent.add_widget(Button(text="-", pos= (200, 800), on_press=self.sub, font_size=50))
+        parent.add_widget(Button(text="+", pos=(200, 800), on_press=self.add, font_size=50))
+        parent.add_widget(self.size_input)
+        parent.add_widget(Button(text="GO", pos=(700, 800), on_press=self.set_size, font_size=40))
         parent.add_widget(self.x0_input)
         parent.add_widget(self.x1_input)
         parent.add_widget(self.y0_input)
         parent.add_widget(self.y1_input)
         parent.add_widget(self.button_go)
         parent.add_widget(self.label)
+
+        self.fill_boxes()
 
         return parent
 
